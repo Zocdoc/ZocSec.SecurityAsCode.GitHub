@@ -10,3 +10,7 @@ The title of the file follows this naming convention: Github_Audit_YYYY-MM-DD.xl
 ``` $ python3 github_tasks.py -t <YOUR TOKEN> -a``` to perform full account audit
 
 ``` $ python3 github_tasks.py -t <YOUR TOKEN> -u <updated of the orginal XLSX spreadsheet>``` to add or remove Topics from Repos
+
+## Output Sample
+
+![Screenshot](sample.png)
