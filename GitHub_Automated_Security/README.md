@@ -4,6 +4,12 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 * Visit (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) for AWS CLI configuration.
 * Visit (https://serverless.com/framework/docs/getting-started/) for serverless CLI configuration.
 
+## To Do
+
+1. Create AWS Simple Notification Services (SNS) topic in your AWS environment with topic name ``` github-repo-monitor ```. See https://docs.aws.amazon.com/gettingstarted/latest/deploy/creating-an-sns-topic.html.
+2. Unzip node_module.zip file to the same directory.
+
+
 ## Usage
 
 ```$ bash setup.sh``` Enter the AWS Profile, AWS Region, GitHub Personal Access Token, and WebHook Secret
@@ -11,6 +17,7 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 ```$ sls deploy``` to rebuild stack
 
 ```$ sls remove``` To destory stack
+
 ## Description
 
 Running ```bash setup.sh``` will perform the following execution:
