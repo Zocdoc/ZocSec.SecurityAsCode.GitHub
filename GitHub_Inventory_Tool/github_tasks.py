@@ -288,7 +288,7 @@ if __name__ == "__main__":
 								print (orginal_topic,topic_del,updated_topics )
 								repo_events.replace_topics(updated_topics) # Update Github with List "updated_topics"
 							else: # if no value is found in column "Topic_del",
-								pass # DO WORRY ABOUT IT!
+								pass # DON'T WORRY ABOUT IT!
 							
 
 
