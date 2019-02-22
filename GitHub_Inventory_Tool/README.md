@@ -13,4 +13,4 @@ The title of the file follows this naming convention: Github_Audit_YYYY-MM-DD.xl
 
 ## Output Sample
 
-![Screenshot](sample.png)
+<img src="sample.png" width="1000" height="80"/>
