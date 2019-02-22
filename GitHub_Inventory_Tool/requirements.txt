@@ -1,0 +1,4 @@
+PyGithub>=1.43.3
+openpyxl>=2.5.9
+progressbar>=2.5
+
