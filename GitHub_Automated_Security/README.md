@@ -7,7 +7,7 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 ## To Do
 
 1. Create AWS Simple Notification Services (SNS) topic in your AWS environment with topic name ``` github-repo-monitor ```. See https://docs.aws.amazon.com/gettingstarted/latest/deploy/creating-an-sns-topic.html.
-2. Unzip node_module.zip file to the same directory.
+2. If node_module folder is not present, unzip node_module.zip file to the same directory.
 
 
 ## Usage
