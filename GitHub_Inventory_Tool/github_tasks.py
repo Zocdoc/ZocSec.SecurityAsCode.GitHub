@@ -3,7 +3,7 @@
 # A tool for extracting important informaiton about all repos in an organization.
 
 # Authors:	Gary Tsai @garymalaysia
-#           Jay Ball @veggiespam
+#            Jay Ball @veggiespam
 #			
 #
 
