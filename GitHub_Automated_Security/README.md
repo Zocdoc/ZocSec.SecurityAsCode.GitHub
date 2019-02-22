@@ -16,7 +16,7 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 
 ```$ sls deploy``` to rebuild stack
 
-```$ sls remove``` To destory stack
+```$ sls remove``` to destory stack
 
 ## Description
 
