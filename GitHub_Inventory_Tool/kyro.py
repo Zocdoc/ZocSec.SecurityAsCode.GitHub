@@ -1,4 +1,4 @@
-# github_tasks.py || part of ZocSec.SecurityAsCode.GitHub
+# kyro.py || part of ZocSec.SecurityAsCode.GitHub
 #
 # A tool for extracting important informaiton about all repos in an organization.
 
