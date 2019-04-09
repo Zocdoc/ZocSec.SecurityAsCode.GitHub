@@ -15,6 +15,7 @@ AWS.config.update({region: process.env.AWS_REGION});
 
 const encrypted = process.env.GITHUB_WEBHOOK_SECRET;
 const secret = process.env.GITHUB_TOKEN;
+const company = process.env.ORG;
 let decrypted;
 let decrypted_secret;
 var all_hooks = [];
@@ -84,49 +85,60 @@ module.exports.initial_trigger = (event, context, callback) => {
                     content_type:"json",
                     secret:decrypted
                     };
+              try{
                 const hook = await octokit.orgs.createHook({
                 org: organization,
                 name: 'web', 
                 config,
                 events: ['push','public','repository']});
+              }
+              catch(err){
+                console.log(err["errors"])
                 //For more on events see https://developer.github.com/v3/activity/events/types/
               }
+              }
+
+            async function delete_hook(organization, id){
+              const del = await octokit.orgs.deleteHook({org: organization,
+                hook_id: id});
+            }
             
+            async function list_hook(organization){
+              const list = await octokit.orgs.listHooks({
+                org: organization, 
+                per_page: 100
+
+              });
+              for (i = 0; i<list.data.length; i++){
+                all_hooks.push(list.data[i]["config"]["url"])
+                if (list.data[i]["config"]["url"].includes(endpoint_URL)){
+                  // do noting if the webhook API gateway exist
+                } else if (list.data[i]["config"]["url"].includes("it-eng/webhook")){
+                  delete_hook(organization, list.data[i]["id"])
+                }              
+              }
+            }
             
+
+
             octokit.paginate('GET /user/orgs').then(org_data => { 
             for (var org of org_data){
-              console.log(org.login);
-              octokit.paginate(`GET /orgs/${org.login}/hooks`).then(any_webhook => {
-              for ( var i = 0; i< any_webhook.length; i ++){
-                all_hooks[i] = any_webhook[i]['config']['url'];
-              }
-
-              if (all_hooks.includes(endpoint_URL)){
-                console.log(true);
-              }
-              else{
-                add_hook(org.login);
-                      
-        }
-        
-          });  
-         
+              if (org.login == company) {
+                console.log(org.login);
+                list_hook(org.login)
+                add_hook(org.login)
             }
-         });
-              });
-
-          }         
+          }
         });
+          });
+          }
+        });
+        }
       }
-        
-    }
-      
     }
   });
+  });
 
-   });
-    
-
-    callback(null, response);
+  callback(null, response);
   };
 

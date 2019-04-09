@@ -1,0 +1,592 @@
+{
+  "service": {
+    "service": "github-webhook-listener",
+    "serviceObject": {
+      "name": "github-webhook-listener"
+    },
+    "provider": {
+      "stage": "it-eng",
+      "region": "us-east-1",
+      "variableSyntax": "\\${([ ~:a-zA-Z0-9._@'\",\\-\\/\\(\\)]+?)}",
+      "name": "aws",
+      "environment": {
+        "NODE_PATH": "./:/opt/node_modules"
+      },
+      "runtime": "nodejs8.10",
+      "iamManagedPolicies": [
+        "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+      ],
+      "iamRoleStatements": [
+        {
+          "Effect": "Allow",
+          "Action": "kms:Decrypt",
+          "Resource": [
+            "arn:aws:kms:us-east-1:033074250527:key/33510fa6-c382-4dfb-b707-2ad9d8fb169e"
+          ]
+        },
+        {
+          "Effect": "Allow",
+          "Action": "apigateway:GET",
+          "Resource": [
+            "arn:aws:apigateway:us-east-1::/restapis*"
+          ]
+        }
+      ],
+      "versionFunctions": true,
+      "remoteFunctionData": null,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          },
+          "GithubWebhookListenerLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/github-webhook-listener-it-eng-githubWebhookListener"
+            }
+          },
+          "InitialUnderscoretriggerLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/github-webhook-listener-it-eng-initial_trigger"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "it-eng",
+                        "github-webhook-listener",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/github-webhook-listener-it-eng-githubWebhookListener:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/github-webhook-listener-it-eng-initial_trigger:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/github-webhook-listener-it-eng-githubWebhookListener:*:*"
+                          },
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/github-webhook-listener-it-eng-initial_trigger:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][0]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iamRoleStatements\"][1]"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "github-webhook-listener",
+                    "it-eng",
+                    "us-east-1",
+                    "lambdaRole"
+                  ]
+                ]
+              },
+              "ManagedPolicyArns": [
+                "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+              ]
+            }
+          },
+          "GithubWebhookListenerLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/github-webhook-listener/it-eng/1554838771981-2019-04-09T19:39:31.981Z/github-webhook-listener.zip"
+              },
+              "FunctionName": "github-webhook-listener-it-eng-githubWebhookListener",
+              "Handler": "githubWebhook/handler.githubWebhookListener",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "NODE_PATH": "./:/opt/node_modules",
+                  "GITHUB_TOKEN": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQG49vhskvFrGStfrE0bRe69AAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDN6dLP1UJ1qeztPpHwIBEIBDWlmxEFb5M7qke/rZS9BXjeHz6YlVmXbbQ/vRQOrPKbhvbrC4TMchxiHiv2r2GQpTK8cSVO7Mz4xOVNhrBlKtVbXvwg==",
+                  "GITHUB_WEBHOOK_SECRET": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQEepNuRNu3ocFZ7YVB3tGFoAAAAcTBvBgkqhkiG9w0BBwagYjBgAgEAMFsGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMVgJG+ODLHQufMsobAgEQgC6bNLH08VbyeLOsQkd5MW1TquBXH+Q441iN2jQdjnAOk7txRSIgHW8ycE8KnwJS"
+                }
+              },
+              "Layers": [
+                "arn:aws:lambda:us-east-1:033074250527:layer:octokit_Module:20"
+              ]
+            },
+            "DependsOn": [
+              "GithubWebhookListenerLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "GithubWebhookListenerLambdaVersionw3zkuQRr0a7wB3npGO2SnWvr09bwkHR7FP5M16gLeQ": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "GithubWebhookListenerLambdaFunction"
+              },
+              "CodeSha256": "WdkTM2fNE4IEnSBy53cEBG6Xr0CEWbnNngH1+lTqrUU="
+            }
+          },
+          "InitialUnderscoretriggerLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/github-webhook-listener/it-eng/1554838771981-2019-04-09T19:39:31.981Z/github-webhook-listener.zip"
+              },
+              "FunctionName": "github-webhook-listener-it-eng-initial_trigger",
+              "Handler": "initialTrigger/handler.initial_trigger",
+              "MemorySize": 1024,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              },
+              "Runtime": "nodejs8.10",
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "NODE_PATH": "./:/opt/node_modules",
+                  "GITHUB_TOKEN": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQG49vhskvFrGStfrE0bRe69AAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDN6dLP1UJ1qeztPpHwIBEIBDWlmxEFb5M7qke/rZS9BXjeHz6YlVmXbbQ/vRQOrPKbhvbrC4TMchxiHiv2r2GQpTK8cSVO7Mz4xOVNhrBlKtVbXvwg==",
+                  "GITHUB_WEBHOOK_SECRET": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQEepNuRNu3ocFZ7YVB3tGFoAAAAcTBvBgkqhkiG9w0BBwagYjBgAgEAMFsGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMVgJG+ODLHQufMsobAgEQgC6bNLH08VbyeLOsQkd5MW1TquBXH+Q441iN2jQdjnAOk7txRSIgHW8ycE8KnwJS",
+                  "ORG": "Zocdoc"
+                }
+              },
+              "Layers": [
+                "arn:aws:lambda:us-east-1:033074250527:layer:octokit_Module:20"
+              ]
+            },
+            "DependsOn": [
+              "InitialUnderscoretriggerLogGroup",
+              "IamRoleLambdaExecution"
+            ]
+          },
+          "InitialUnderscoretriggerLambdaVersionW0WFWc22Crwx12NuQhlNAa1XAHMPAxeWQiXAuWM8hk": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "InitialUnderscoretriggerLambdaFunction"
+              },
+              "CodeSha256": "WdkTM2fNE4IEnSBy53cEBG6Xr0CEWbnNngH1+lTqrUU="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "it-eng-github-webhook-listener",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              }
+            }
+          },
+          "ApiGatewayResourceWebhook": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "webhook",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceInitialtrigger": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "initial_trigger",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodWebhookPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceWebhook"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "GithubWebhookListenerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayMethodInitialtriggerGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceInitialtrigger"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "InitialUnderscoretriggerLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            }
+          },
+          "ApiGatewayDeployment1554838772156": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "it-eng"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodWebhookPost",
+              "ApiGatewayMethodInitialtriggerGet"
+            ]
+          },
+          "GithubWebhookListenerLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "GithubWebhookListenerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "InitialUnderscoretriggerLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "InitialUnderscoretriggerLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "apigateway.",
+                    {
+                      "Ref": "AWS::URLSuffix"
+                    }
+                  ]
+                ]
+              },
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          },
+          "GithubWebhookListenerLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "GithubWebhookListenerLambdaVersionw3zkuQRr0a7wB3npGO2SnWvr09bwkHR7FP5M16gLeQ"
+            }
+          },
+          "InitialUnderscoretriggerLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "InitialUnderscoretriggerLambdaVersionW0WFWc22Crwx12NuQhlNAa1XAHMPAxeWQiXAuWM8hk"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.us-east-1.",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/it-eng"
+                ]
+              ]
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket"
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "pluginsData": {},
+    "functions": {
+      "githubWebhookListener": {
+        "handler": "githubWebhook/handler.githubWebhookListener",
+        "environment": {
+          "GITHUB_TOKEN": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQG49vhskvFrGStfrE0bRe69AAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDN6dLP1UJ1qeztPpHwIBEIBDWlmxEFb5M7qke/rZS9BXjeHz6YlVmXbbQ/vRQOrPKbhvbrC4TMchxiHiv2r2GQpTK8cSVO7Mz4xOVNhrBlKtVbXvwg==",
+          "GITHUB_WEBHOOK_SECRET": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQEepNuRNu3ocFZ7YVB3tGFoAAAAcTBvBgkqhkiG9w0BBwagYjBgAgEAMFsGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMVgJG+ODLHQufMsobAgEQgC6bNLH08VbyeLOsQkd5MW1TquBXH+Q441iN2jQdjnAOk7txRSIgHW8ycE8KnwJS"
+        },
+        "events": [
+          {
+            "http": {
+              "path": "webhook",
+              "method": "post",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "layers": [
+          "arn:aws:lambda:us-east-1:033074250527:layer:octokit_Module:20"
+        ],
+        "cors": true,
+        "name": "github-webhook-listener-it-eng-githubWebhookListener",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
+      },
+      "initial_trigger": {
+        "handler": "initialTrigger/handler.initial_trigger",
+        "environment": {
+          "GITHUB_TOKEN": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQG49vhskvFrGStfrE0bRe69AAAAhzCBhAYJKoZIhvcNAQcGoHcwdQIBADBwBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDN6dLP1UJ1qeztPpHwIBEIBDWlmxEFb5M7qke/rZS9BXjeHz6YlVmXbbQ/vRQOrPKbhvbrC4TMchxiHiv2r2GQpTK8cSVO7Mz4xOVNhrBlKtVbXvwg==",
+          "GITHUB_WEBHOOK_SECRET": "AQICAHjLxN3PaLNPtYN3MzKdhfcMMAE/XE7zRwnfWZP1BDpQbQEepNuRNu3ocFZ7YVB3tGFoAAAAcTBvBgkqhkiG9w0BBwagYjBgAgEAMFsGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMVgJG+ODLHQufMsobAgEQgC6bNLH08VbyeLOsQkd5MW1TquBXH+Q441iN2jQdjnAOk7txRSIgHW8ycE8KnwJS",
+          "ORG": "Zocdoc"
+        },
+        "events": [
+          {
+            "http": {
+              "method": "get",
+              "path": "initial_trigger",
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "layers": [
+          "arn:aws:lambda:us-east-1:033074250527:layer:octokit_Module:20"
+        ],
+        "name": "github-webhook-listener-it-eng-initial_trigger",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs8.10",
+        "vpc": {}
+      }
+    },
+    "layers": {},
+    "artifact": "/Users/gary.tsai/Desktop/ZocSec.SecurityAsCode.GitHub/GitHub_Automated_Security/.serverless/github-webhook-listener.zip"
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/github-webhook-listener/it-eng/1554838771981-2019-04-09T19:39:31.981Z",
+    "artifact": "github-webhook-listener.zip"
+  }
+}
