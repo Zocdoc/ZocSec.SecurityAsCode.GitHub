@@ -49,6 +49,7 @@ kms.decrypt({ CiphertextBlob: new Buffer(token, 'base64') }, (err, data) => {
   const id = headers['X-GitHub-Delivery'];
   const calculatedSig = signRequestBody(decrypted_secret_token, event.body);
   const acct_id = JSON.stringify(context.invokedFunctionArn).split(':')[4];
+  var topic = []
 
 
   if (typeof decrypted_secret_token !== 'string') {
@@ -121,12 +122,31 @@ kms.decrypt({ CiphertextBlob: new Buffer(encrypted_github_token, 'base64') }, (e
       auth: `token ${decrypted_github_token}`
     });
 
+async function label_open_source(user, repository, topic_to_add){
+  const result = await octokit.repos.replaceTopics({
+    owner:user ,
+    repo:repository ,
+    names: topic_to_add,
+    headers: {
+      accept: 'application/vnd.github.mercy-preview+json'}
+  })
+}
+
 async function take_action(){
-  const result = await octokit.repos.update({
-    owner: `${body.organization.login}`, 
-    repo : `${body.repository.name}`,
-    name: `${body.repository.name}`,
-    private: true})
+  try{
+    const result = await octokit.repos.update({
+      owner: `${body.organization.login}`, 
+      repo : `${body.repository.name}`,
+      name: `${body.repository.name}`,
+      private: true})
+  }
+  catch(err){
+    console.log(err["errors"])
+    if (err["errors"][0]["message"].includes("Public forks can\'t be made private")){
+      topic.push("open-source")
+      label_open_source(`${body.organization.login}`, `${body.repository.name}`, topic)
+    }
+  }
 }
 
 
@@ -159,7 +179,7 @@ async function list_topic_and_action(){
     // handle promise's fulfilled/rejected states
     publishTextPromise.then(
       function(data) {
-        console.log("Message ${params.Message} send sent to the topic ${params.TopicArn}");
+        console.log(`Message ${params.Message} send sent to the topic ${params.TopicArn}`);
         console.log("MessageID is " + data.MessageId);
       }).catch(
         function(err) {
@@ -169,9 +189,9 @@ async function list_topic_and_action(){
     }
       
     }
-
- list_topic_and_action(); // initiate action 
- 
+if (typeof (`${body.repository.name}`) !== 'underfind'){
+  list_topic_and_action(); // initiate action 
+}
 
 
   const response = {

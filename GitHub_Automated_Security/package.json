@@ -5,7 +5,8 @@
   "main": "handler.js",
   "dependencies": {
     "@octokit/rest": "^16.16.0",
-    "aws-sdk": "^2.408.0"
+    "aws-sdk": "^2.408.0",
+    "serverless": "^1.40.0"
   },
   "devDependencies": {},
   "scripts": {
