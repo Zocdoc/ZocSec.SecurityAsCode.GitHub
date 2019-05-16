@@ -39,7 +39,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/layer-section/dev/1557954998867-2019-05-15T21:16:38.867Z/octokit_Module.zip"
+                "S3Key": "serverless/layer-section/dev/1558033797095-2019-05-16T19:09:57.095Z/octokit_Module.zip"
               },
               "LayerName": "octokit_Module",
               "Description": "Contains octokit and AWS SDK modules"
@@ -101,7 +101,7 @@
     }
   },
   "package": {
-    "artifactDirectoryName": "serverless/layer-section/dev/1557954998867-2019-05-15T21:16:38.867Z",
+    "artifactDirectoryName": "serverless/layer-section/dev/1558033797095-2019-05-16T19:09:57.095Z",
     "artifact": ""
   }
 }
