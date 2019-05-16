@@ -39,7 +39,7 @@ module.exports.initial_trigger = (event, context, callback) => {
             decrypted = data.Plaintext.toString('ascii');
 
   const params = {};
-  var regex = /-github-webhook3-listener/;
+  var regex = /-github-webhook4-listener/;
   console.log("**********************************************************"); // review cloudwatch log to see if this section has kick off for debugging
     apigateway.getRestApis(params, function(err, data) {
     if (err) console.log(err, err.stack); // an error occurred
