@@ -106,7 +106,7 @@
 
 
 
-service: github-webhook-listener
+service: github-webhook3-listener
 
     
 provider:
@@ -132,8 +132,8 @@ functions:
   githubWebhookListener:
     handler: githubWebhook/handler.githubWebhookListener
     environment:
-      GITHUB_TOKEN: ${ssm:/GitHub-Webhook/github_access_token}
-      GITHUB_WEBHOOK_SECRET: ${ssm:/GitHub-Webhook/github_webhook_secret}
+      GITHUB_TOKEN: ${ssm:/GitHub-Webhook3/github_access_token}
+      GITHUB_WEBHOOK_SECRET: ${ssm:/GitHub-Webhook3/github_webhook_secret}
     events:
       - http:
           path: webhook
@@ -144,8 +144,8 @@ functions:
   initial_trigger:
     handler: initialTrigger/handler.initial_trigger
     environment:
-      GITHUB_TOKEN: ${ssm:/GitHub-Webhook/github_access_token}
-      GITHUB_WEBHOOK_SECRET: ${ssm:/GitHub-Webhook/github_webhook_secret}
+      GITHUB_TOKEN: ${ssm:/GitHub-Webhook3/github_access_token}
+      GITHUB_WEBHOOK_SECRET: ${ssm:/GitHub-Webhook3/github_webhook_secret}
       ORG: ${file(../secrets.yml):Aws_Account.org}
     events:
       - http:

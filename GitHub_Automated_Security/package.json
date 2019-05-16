@@ -4,7 +4,7 @@
   "description": "Configure AWS CLI and Serverless Framework. And if you have separate AWS profile, please makesure you have it configure properly. * Visit (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) for AWS CLI configuration. * Visit (https://serverless.com/framework/docs/getting-started/) for serverless CLI configuration.",
   "main": "handler.js",
   "dependencies": {
-    "@octokit/rest": "^16.16.0",
+    "@octokit/rest": "^16.25.5",
     "aws-sdk": "^2.408.0",
     "serverless": "^1.40.0"
   },

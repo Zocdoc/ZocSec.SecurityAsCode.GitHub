@@ -122,7 +122,16 @@ kms.decrypt({ CiphertextBlob: new Buffer(encrypted_github_token, 'base64') }, (e
       auth: `token ${decrypted_github_token}`
     });
 
+// async function enable_vuln() {
+//   const enb = octokit.repos.enableVulnerabilityAlerts({
+//     owner: `${body.organization.login}`,
+//     repo : `${body.repository.name}`,
+//     headers: { accept: 'application/vnd.github.dorian-preview+json'}
+//   })
+// }
+
 async function label_open_source(user, repository, topic_to_add){
+  //enable_vuln()
   const result = await octokit.repos.replaceTopics({
     owner:user ,
     repo:repository ,
@@ -160,6 +169,7 @@ async function list_topic_and_action(){
 
     if (result.data.names.includes('open-source') === false && body.repository.private === false ){
       take_action();
+      //enable_vuln();
      
       var params = {
       Message: `Repository: "${body.repository.full_name}" changed to Private,

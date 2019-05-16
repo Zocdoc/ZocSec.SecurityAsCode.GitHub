@@ -39,14 +39,13 @@ module.exports.initial_trigger = (event, context, callback) => {
             decrypted = data.Plaintext.toString('ascii');
 
   const params = {};
-  var regex = /-github-webhook-listener/;
+  var regex = /-github-webhook3-listener/;
   console.log("**********************************************************"); // review cloudwatch log to see if this section has kick off for debugging
     apigateway.getRestApis(params, function(err, data) {
     if (err) console.log(err, err.stack); // an error occurred
 
       else {    
       for (var i = 0 ; i < data['items'].length; i++){
-        //console.log(data);
         var api_names = data['items'][i]['name'];
         if ( regex.test(api_names) == true ){
           const api_id = data['items'][i]['id'];
@@ -117,6 +116,7 @@ module.exports.initial_trigger = (event, context, callback) => {
                   delete_hook(organization, list.data[i]["id"])
                 }              
               }
+              console.log(all_hooks)
             }
             
 
@@ -129,6 +129,7 @@ module.exports.initial_trigger = (event, context, callback) => {
                 add_hook(org.login)
             }
           }
+        
         });
           });
           }
