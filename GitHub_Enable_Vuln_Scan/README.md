@@ -9,7 +9,7 @@ This script is a Proof of Concept (PoC) for any to enable vulnerability scanning
 You need be in Admin role for the repo or your organization
 
 ## Usage
-
+```$ pip3 install requirement.txt```
 ```$ enable_vuln.py -t <Your Personal Access Token> -o <your company/organization>```
 
 ## Warning

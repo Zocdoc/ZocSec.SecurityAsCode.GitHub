@@ -1,4 +1,4 @@
-#Know_Your_RepOs (KYRO)
+# Know_Your_RepOs (KYRO)
 
 This script will output a XLSX file with all GitHub repo information to the present working directory.
 The title of the file follows this naming convention: Github_Audit_YYYY-MM-DD.xlsx
