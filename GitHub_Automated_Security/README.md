@@ -8,6 +8,7 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 
 1. Create AWS Simple Notification Services (SNS) topic in your AWS environment with topic name ``` github-repo-monitor ```. See https://docs.aws.amazon.com/gettingstarted/latest/deploy/creating-an-sns-topic.html.
 2. If node_module folder is not present, unzip node_module.zip file to the same directory.
+3. Assure you have ```AdministratorAccess``` in your AWS IAM role
 
 
 ## Usage
@@ -22,9 +23,6 @@ Configure AWS CLI and Serverless Framework. And if you have separate AWS profile
 
 Running ```bash setup.sh``` will perform the following execution:
 1. Remove secrets.yml file.Create it if secret.yml not found. This file is created with AWS Account information and data you entered during setup process
-
-* Note: ```secrets.yml``` will be created in 1 directory behind ```../``` the directory you ran ```bash setup.sh```. This prevents you from commiting your secrets to version control.
-
 2. Check for ```GitHub-Webhook``` alias in AWS KMS service. Create it if alias not found
 3. Encrypt GitHub token and webhook secret
 4. Stores the encrypted values in Amazon Systems Manager under "Store Parameter"

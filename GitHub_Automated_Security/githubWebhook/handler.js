@@ -153,7 +153,14 @@ req.on('error', (error) => {
 
 req.write(data)
 req.end()
-  
+
+/*
+Reference:
+
+1) https://developer.github.com/changes/2019-04-24-vulnerability-alerts/
+2) https://flaviocopes.com/node-make-http-requests/
+3) https://medium.com/dev-bits/a-guide-for-adding-jwt-token-based-authentication-to-your-single-page-nodejs-applications-c403f7cf04f4
+*/  
 }
 
 async function label_open_source(user, repository, topic_to_add){

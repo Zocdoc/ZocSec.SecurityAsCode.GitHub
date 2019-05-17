@@ -55,11 +55,11 @@ then
 
 
 	arr=($(aws kms list-aliases --region $region --profile $profile | grep AliasName | cut -d '"' -f 4))
-	targetkeyid=$(aws kms list-aliases --region us-east-1 --profile it-eng | grep  -A 1 -w alias/GitHub-Webhook4 | grep TargetKeyId | cut -d '"' -f 4)
+	targetkeyid=$(aws kms list-aliases --region us-east-1 --profile it-eng | grep  -A 1 -w alias/GitHub-Webhook | grep TargetKeyId | cut -d '"' -f 4)
 	export KEYID=$targetkeyid
 
 		if [ $targetkeyid ]; then
-			echo 'GitHub-Webhook4 is Found. Will use keyID:' $targetkeyid
+			echo 'GitHub-Webhook is Found. Will use keyID:' $targetkeyid
 
 			echo ""
 			echo "Enter your GITHUB PERSONAL ACCESS TOKEN:"
@@ -90,8 +90,8 @@ then
 			export KMS_ARN=$kmsARN
 
 
-			aws ssm put-parameter --name /GitHub-Webhook4/github_access_token --type String --value $encrypt_token --region $region --profile $profile
-			aws ssm put-parameter --name /GitHub-Webhook4/github_webhook_secret  --type String --value $encrypt_secret --region $region --profile $profile
+			aws ssm put-parameter --name /GitHub-Webhook/github_access_token --type String --value $encrypt_token --region $region --profile $profile
+			aws ssm put-parameter --name /GitHub-Webhook/github_webhook_secret  --type String --value $encrypt_secret --region $region --profile $profile
 
 			echo ""
 			echo "Done!"
@@ -135,10 +135,10 @@ EOL
 
 
 		else
-			keyid=$(aws kms create-key --description github-webhook4 --region $region --profile $profile | grep KeyId | cut -d '"' -f 4)
+			keyid=$(aws kms create-key --description github-webhook --region $region --profile $profile | grep KeyId | cut -d '"' -f 4)
 			#echo $keyid
 			export KEYID=$keyid
-			aws kms create-alias --alias-name alias/GitHub-Webhook4 --target-key-id $keyid --region $region --profile $profile
+			aws kms create-alias --alias-name alias/GitHub-Webhook --target-key-id $keyid --region $region --profile $profile
 
 			echo ""
 			echo "Enter your GITHUB PERSONAL ACCESS TOKEN:"
@@ -164,8 +164,8 @@ EOL
 			echo $ENCRYPTED_TOKEN
 			echo $ENCRYPTED_SECRET
 
-			aws ssm put-parameter --name /GitHub-Webhook4/github_access_token --type String --value $encrypt_token --region $region --profile $profile
-			aws ssm put-parameter --name /GitHub-Webhook4/github_webhook_secret  --type String --value $encrypt_secret --region $region --profile $profile
+			aws ssm put-parameter --name /GitHub-Webhook/github_access_token --type String --value $encrypt_token --region $region --profile $profile
+			aws ssm put-parameter --name /GitHub-Webhook/github_webhook_secret  --type String --value $encrypt_secret --region $region --profile $profile
 
 			kmsARN=$(aws kms list-keys --region $region --profile $profile | grep $keyid | grep KeyArn | cut -d '"' -f 4)
 			export KMS_ARN=$kmsARN
