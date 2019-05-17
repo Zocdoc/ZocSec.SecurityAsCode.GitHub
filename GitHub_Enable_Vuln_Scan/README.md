@@ -10,6 +10,7 @@ You need be in Admin role for the repo or your organization
 
 ## Usage
 ```$ pip3 install requirement.txt```
+
 ```$ python3 enable_vuln.py -t <Your Personal Access Token> -o <your company/organization>```
 
 ## Warning
