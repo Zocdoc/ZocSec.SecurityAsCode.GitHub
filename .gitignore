@@ -1,3 +1,5 @@
 .DS_Store
 secret.yml
 .serverless
+/GitHub_Automated_Security/layer/.serverless
+/GitHub_Automated_Security/layer/.DS_Store

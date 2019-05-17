@@ -1,6 +1,8 @@
 # Changelog
 
-
+## 2019 May 18
+* Security feature
+	* Created API call to enable vulnerability scanning on Repo
 
 ## 2019 April 09
 * Feature and security enchancement

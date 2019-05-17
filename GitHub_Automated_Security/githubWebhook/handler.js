@@ -11,6 +11,7 @@
 "use strict";
 
 const crypto = require('crypto');
+const https = require('https');
 const Octokit = require('@octokit/rest');
 
 // Load the AWS SDK for Node.js
@@ -122,16 +123,41 @@ kms.decrypt({ CiphertextBlob: new Buffer(encrypted_github_token, 'base64') }, (e
       auth: `token ${decrypted_github_token}`
     });
 
-// async function enable_vuln() {
-//   const enb = octokit.repos.enableVulnerabilityAlerts({
-//     owner: `${body.organization.login}`,
-//     repo : `${body.repository.name}`,
-//     headers: { accept: 'application/vnd.github.dorian-preview+json'}
-//   })
-// }
+function enable_vuln() {
+  const data = JSON.stringify({
+ 
+})
+
+const options = {
+  hostname: 'api.github.com',
+  path: `/repos/${body.organization.login}/${body.repository.name}/vulnerability-alerts`,
+  method: 'PUT',
+  headers: {
+    'Authorization': `Bearer ${decrypted_github_token}`,
+    'accept':'application/vnd.github.dorian-preview+json',
+    'User-Agent':'AWS-Lambda-Github-Webhoot'
+  }
+}
+
+const req = https.request(options, (res) => {
+  console.log(`statusCode: ${res.statusCode}`)
+
+  res.on('data', (d) => {
+    process.stdout.write(d)
+  })
+})
+
+req.on('error', (error) => {
+  console.error(error)
+})
+
+req.write(data)
+req.end()
+  
+}
 
 async function label_open_source(user, repository, topic_to_add){
-  //enable_vuln()
+  enable_vuln()
   const result = await octokit.repos.replaceTopics({
     owner:user ,
     repo:repository ,
@@ -169,7 +195,7 @@ async function list_topic_and_action(){
 
     if (result.data.names.includes('open-source') === false && body.repository.private === false ){
       take_action();
-      //enable_vuln();
+      enable_vuln();
      
       var params = {
       Message: `Repository: "${body.repository.full_name}" changed to Private,
