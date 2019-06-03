@@ -1,9 +1,10 @@
 // initialTrigger/handler.js  || part of ZocSec.SecurityAsCode.GitHub
 //
 // This script will trigger (1 time) to add GitHub webhook at the organizational level at the end of cloudformation build.
-
-// Authors:  Gary Tsai @garymalaysia
-//             Jay Ball @veggiespam
+//
+// Owner:   Copyright © 2018-2019 Zocdoc Inc.  www.zocdoc.com
+// Authors: Gary Tsai @garymalaysia                                                                                        
+//          Jay Ball  @veggiespam
 
 'use strict';
 

@@ -31,3 +31,15 @@ Running ```bash setup.sh``` will perform the following execution:
 ## Workflow
 
 ![Screenshot](aws-github-webhook.png)
+
+## About
+
+This project was released to the public as part of the Zocdoc's ZocSec.SecurityAsCode initiative.
+
+The primary contributors to this effort are Jay Ball ([@veggiespam](https://github.com/veggiespam)) and Gary Tsai ([@garymalaysia](https://github.com/garymalaysia)).
+
+Copyright © 2018-2019 Zocdoc Inc.  www.zocdoc.com
+
+<!-- vim: spell expandtab
+-->
+

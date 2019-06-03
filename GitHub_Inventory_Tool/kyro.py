@@ -1,9 +1,10 @@
 # kyro.py || part of ZocSec.SecurityAsCode.GitHub
 #
 # A tool for extracting important informaiton about all repos in an organization.
-
+#
+# Owner:    Copyright © 2018-2019 Zocdoc Inc.  www.zocdoc.com
 # Authors:	Gary Tsai @garymalaysia
-#            Jay Ball @veggiespam
+#           Jay Ball  @veggiespam
 #			
 #
 

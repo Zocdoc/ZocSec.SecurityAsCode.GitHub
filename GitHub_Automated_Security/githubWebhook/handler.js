@@ -1,9 +1,10 @@
 // githubWebhook/handler.js  || part of ZocSec.SecurityAsCode.GitHub
 //
 // This script will trigger everytime GitHub webhook sends a notification base on your webhook config at Organization level.
-
-// Authors:  Gary Tsai @garymalaysia
-//             Jay Ball @veggiespam
+//
+// Owner:	Copyright © 2018-2019 Zocdoc Inc.  www.zocdoc.com
+// Authors: Gary Tsai @garymalaysia
+//          Jay Ball  @veggiespam
 
 
 
