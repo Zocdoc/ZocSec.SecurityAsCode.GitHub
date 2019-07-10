@@ -5,7 +5,7 @@ The title of the file follows this naming convention: Github_Audit_YYYY-MM-DD.xl
 
 ## Usage
 
-``` $ pip3 install -r requirement.txt ```
+``` $ pip3 install -r requirements.txt ```
 
 ``` $ python3 kyro.py -t <YOUR TOKEN> -a``` to perform full account audit
 
