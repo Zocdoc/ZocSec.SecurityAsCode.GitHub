@@ -1,9 +1,10 @@
 # kyro.py || part of ZocSec.SecurityAsCode.GitHub
 #
 # A tool for extracting important informaiton about all repos in an organization.
-
+#
+# Owner:    Copyright © 2018-2019 Zocdoc Inc.  www.zocdoc.com
 # Authors:	Gary Tsai @garymalaysia
-#            Jay Ball @veggiespam
+#           Jay Ball  @veggiespam
 #			
 #
 
@@ -15,7 +16,6 @@ import argparse
 import datetime
 import sys
 from openpyxl import Workbook
-from openpyxl.compat import range
 from openpyxl.utils import get_column_letter
 from openpyxl import load_workbook
 from openpyxl.styles import PatternFill, Side, Alignment, Font
@@ -135,8 +135,11 @@ if __name__ == "__main__":
 			for lang in repo.get_languages():
 				languages = languages + lang + " "
 			teamlist = ""
-			for team in repo.get_teams():
-				teamlist = teamlist + team.name + "/" + team.permission + " "
+			try:
+				for team in repo.get_teams():
+					teamlist = teamlist + team.name + "/" + team.permission + " "
+			except:
+				pass
 			topics = ""
 			for topic in repo.get_topics():
 				topics = topics + " "+ topic
@@ -217,11 +220,14 @@ if __name__ == "__main__":
 				
 
 			
-	# Fetching repo deploy keys with Github API 		
-			for key in repo.get_keys():
-				num_of_keys += 1
-				deploy_keys_sheet['a%d' % num_of_keys] = repo.full_name
-				deploy_keys_sheet['b%d' % num_of_keys] = str(key)
+	# Fetching repo deploy keys with Github API 
+			try:
+				for key in repo.get_keys():
+					num_of_keys += 1
+					deploy_keys_sheet['a%d' % num_of_keys] = repo.full_name
+					deploy_keys_sheet['b%d' % num_of_keys] = str(key)
+			except:
+				num_of_keys = 0
 
 			sleep(0.3) # provide some seperation for each Github API call
 
